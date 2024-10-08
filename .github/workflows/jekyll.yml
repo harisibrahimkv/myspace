@@ -24,8 +24,20 @@ jobs:
         gem install bundler
         bundle install
 
+    - name: Debug - Show Jekyll configuration
+      run: |
+        echo "Jekyll version:"
+        bundle exec jekyll --version
+        echo "Jekyll configuration:"
+        bundle exec jekyll build --trace --config _config.yml --verbose
+
     - name: Build site
-      run: JEKYLL_ENV=production bundle exec jekyll build
+      run: JEKYLL_ENV=production bundle exec jekyll build --verbose
+
+    - name: List _site contents
+      run: |
+        echo "Contents of _site directory:"
+        ls -R _site
 
     - name: Deploy to GitHub Pages
       if: github.ref == 'refs/heads/master'
@@ -36,8 +48,14 @@ jobs:
         publish_branch: gh-pages
         force_orphan: true
 
+    - name: Debug deployment
+      if: github.ref == 'refs/heads/master'
+      run: |
+        git fetch origin gh-pages
+        echo "Contents of gh-pages branch:"
+        git ls-tree -r --name-only origin/gh-pages
+
     - name: Upload artifact for preview
-      if: github.event_name == 'pull_request'
       uses: actions/upload-artifact@v4
       with:
         name: site-preview

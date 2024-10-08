@@ -2,6 +2,7 @@ title: MySpace Blog
 description: A blog about myspace
 url: "https://harisibrahimkv.github.io"
 baseurl: "/myspace"
+permalink: /:title/
 
 # Build settings
 markdown: kramdown
