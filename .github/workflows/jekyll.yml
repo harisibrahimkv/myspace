@@ -24,25 +24,8 @@ jobs:
         gem install bundler
         bundle install
 
-    - name: Debug - Show Jekyll version and configuration
-      run: |
-        bundle exec jekyll --version
-        bundle exec jekyll doctor
-        cat _config.yml
-
     - name: Build site
-      run: JEKYLL_ENV=production bundle exec jekyll build --trace
-
-    - name: Debug - List directory contents
-      run: |
-        echo "Current directory:"
-        pwd
-        echo "Contents of current directory:"
-        ls -la
-        echo "Contents of _site directory (if it exists):"
-        ls -la _site || echo "_site directory not found"
-        echo "Contents of docs directory (if it exists):"
-        ls -la docs || echo "docs directory not found"
+      run: JEKYLL_ENV=production bundle exec jekyll build
 
     - name: Deploy to GitHub Pages
       if: github.ref == 'refs/heads/master'
@@ -51,6 +34,7 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./_site
         publish_branch: gh-pages
+        force_orphan: true
 
     - name: Upload artifact for preview
       if: github.event_name == 'pull_request'
